@@ -1,0 +1,18 @@
+% layout 'content_management_admin';
+<h2>Edit: <%= $page->title %></h2>
+<form action="" method="post" id="editform">
+<% if ($page->title_editable) { %>
+<p>
+    <label for="title">Title</label>:<br>
+    <input type="text" name="title" id="title" value="<%= $page->title %>">
+</p>
+<% } %>
+<textarea name="raw" id="raw"><%= $page->raw %></textarea>
+<p>
+    <input type="submit" value="Preview!" name="preview_button">
+    <input type="submit" value="Update!" name="update_button">
+</p>
+</form>
+<hr>
+<p><strong>Preview:</strong></p>
+<div id="preview"><%== $page->html %></div>
