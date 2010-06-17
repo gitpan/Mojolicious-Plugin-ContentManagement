@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Mojolicious-Plugin-ContentManagement
-version:            0.01
+version:            0.011
 abstract:           Content management for Mojolicious
 author:
     - Mirko Westermeier <mail@memowe.de>
