@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
 
-use Mojolicious::Lite;
 use FindBin '$Bin';
+use lib "$Bin/../lib";
+use Mojolicious::Lite;
 use Test::Mojo;
-use Test::WWW::Mechanize::Mojo;
-use Test::More tests => 15;
+use Test::More tests => 18;
 
 # Protect the admin interface
 # (allow only admins who have a good user name / password combination) ;)
@@ -38,61 +38,54 @@ get '/(*everything)' => ( content_management => 1 ) => 'page';
 # Preparations
 app->log->level('error');
 app->renderer->root("$Bin/test-templates");
-my $tester  = Test::Mojo->new(app => app);
-my $t       = Test::WWW::Mechanize::Mojo->new(tester => $tester);
+my $t = Test::Mojo->new;
+
+# Backup
+open my $bfh, '<', "$Bin/test-content/foo.html" or die $!;
+my $backup = join '' => <$bfh>;
+close $bfh;
 
 # Unauthorized
-$tester->get_ok('/admin')->content_like(qr/Authorization required/);
+$t->get_ok('/admin')->content_like(qr/Authorization required/);
 
 # Authorized
 $t->get_ok('/admin?user=foo&pass=foo');
 $t->content_like(qr/Content Management Admin Interface/, 'got in');
 
-# Get a page
-my @pages   = $t->find_all_links(url_regex => qr|^/admin/edit|);
-my $link    = shift @pages;
-my $path    = $1 if $link->url =~ m|/admin/edit(.*)\?user=foo|;
+# Get a page path
+my $elink   = $t->tx->res->dom->at('a[href^=/admin/edit/foo.html]');
+my $epath   = $elink->attrs('href');
+my $path    = $elink->text;
 
 # Find out how it looks
 $t->get_ok($path);
-my $content = $t->content;
+my $content = $t->tx->res->dom->at('body')->text;
 
 # Go to the edit form and look if it matches the page
-$t->get_ok($link->url);
-my ($preview) = $t->content =~ m|<div id="preview">([^<]*)|;
+$t->get_ok($epath);
+my $preview = $t->tx->res->dom->at('#preview')->text;
 is($content, $preview, 'edit form is right for the page');
 
 # Preview
-$t->submit_form(
-    with_fields => {raw => 'foo'},
-    button      => 'preview_button',
-);
-($preview) = $t->content =~ m|<div id="preview">([^<]*)|;
+$t->post_form_ok($epath => {raw => 'foo', preview_button => 'Preview!'});
+$preview = $t->tx->res->dom->at('#preview')->text;
 is($preview, 'foo', 'got the right preview');
 $t->get_ok($path);
-my $content2 = $t->content;
+my $content2 = $t->tx->res->dom->at('body')->text;
 is($content2, $content, 'page is still in old state');
 
 # Edit
-$t->get_ok($link->url);
-$t->submit_form(
-    with_fields => {raw => 'foo'},
-    button      => 'update_button',
-);
-($preview) = $t->content =~ m|<div id="preview">([^<]*)|;
+$t->post_form_ok($epath => {raw => 'foo', update_button => 'Update!'});
+$preview = $t->tx->res->dom->at('#preview')->text;
 is($preview, 'foo', 'got the right preview');
 $t->get_ok($path);
-my $content3 = $t->content;
+my $content3 = $t->tx->res->dom->at('body')->text;
 is($content3, 'foo', 'page has changed');
 
 # Undo
-$t->get($link->url);
-$t->submit_form(
-    with_fields => {raw => $content},
-    button      => 'update_button',
-);
-$t->get($path);
-my $content4 = $t->content;
+$t->post_form_ok($epath => {raw => $backup, update_button => 'Update!'});
+$t->get_ok($path);
+my $content4 = $t->tx->res->dom->at('body')->text;
 is($content4, $content, 'changes undone');
 
 __END__

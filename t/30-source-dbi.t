@@ -1,10 +1,11 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 7;
+use FindBin '$Bin';
+use lib "$Bin/../lib";
 use Mojolicious::Plugin::ContentManagement::Source::Dbi;
 use Mojolicious::Plugin::ContentManagement::Type::Plain;
 use DBI;
-use FindBin '$Bin';
+use Test::More tests => 7;
 
 # Preparations
 my $dsn     = "dbi:SQLite:dbname=$Bin/test-db/db.sqlite";

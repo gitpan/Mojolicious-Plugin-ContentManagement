@@ -27,7 +27,6 @@ t/test-db/schema.sql
 t/test-templates/admin_controller/edit.html.ep
 t/test-templates/admin_controller/list.html.ep
 t/test-templates/layouts/content_management_admin.html.ep
-t/test-templates/layouts/default.html.ep
 t/test-templates/not_found.html.ep
 t/test-templates/page.html.ep
 TODO.md

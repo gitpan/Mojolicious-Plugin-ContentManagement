@@ -12,11 +12,10 @@ WriteMakefile(
     LICENSE             => 'mit',
     PL_FILES            => {},
     PREREQ_PM => {
-        'Mojolicious'                   => 0.9999,
-        'Text::Markdown'                => 1,
-        'DBI'                           => 1.6,
-        'Test::WWW::Mechanize::Mojo'    => '0.0.4',
-        'Test::More'                    => 0,
+        'Mojolicious'                   => 1.3,
+        'Text::Markdown'                => 1.000031,
+        'DBI'                           => 1.61,
+        'DBD::SQLite'                   => 1.29
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Mojolicious-Plugin-ContentManagement-*' },

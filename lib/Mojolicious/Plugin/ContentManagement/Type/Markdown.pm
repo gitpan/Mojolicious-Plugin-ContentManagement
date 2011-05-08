@@ -3,16 +3,16 @@ package Mojolicious::Plugin::ContentManagement::Type::Markdown;
 use warnings;
 use strict;
 
-use base 'Mojolicious::Plugin::ContentManagement::Type';
+use Mojo::Base 'Mojolicious::Plugin::ContentManagement::Type';
 
 use Text::Markdown;
 
-__PACKAGE__->attr( empty_element_suffix     => ' />' );
-__PACKAGE__->attr( tab_width                => 4 );
-__PACKAGE__->attr( markdown_in_html_blocks  => 0 );
-__PACKAGE__->attr( trust_list_start_value   => 0 );
+has empty_element_suffix    => ' />';
+has tab_width               => 4;
+has markdown_in_html_blocks => 0;
+has trust_list_start_value  => 0;
 
-__PACKAGE__->attr( markdown => sub {
+has markdown => sub {
     my $self = shift;
     return Text::Markdown->new(
         empty_element_suffix    => $self->empty_element_suffix,
@@ -20,7 +20,7 @@ __PACKAGE__->attr( markdown => sub {
         markdown_in_html_blocks => $self->markdown_in_html_blocks,
         trust_list_start_value  => $self->trust_list_start_value,
     );
-});
+};
 
 sub translate {
     my ($self, $input) = @_;
@@ -32,7 +32,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::ManagedContent::Type::Markdown - managed markdown content
+Mojolicious::Plugin::ContentManagement::Type::Markdown - managed markdown content
 
 =head1 SYNOPSIS
 
@@ -95,5 +95,5 @@ Markdown translation.
 
 =head1 SEE ALSO
 
-L<Mojolicious::Plugin::ManagedContent>,
-L<Mojolicious::Plugin::ManagedContent::Type>, L<Text::Markdown>
+L<Mojolicious::Plugin::ContentManagement>,
+L<Mojolicious::Plugin::ContentManagement::Type>, L<Text::Markdown>

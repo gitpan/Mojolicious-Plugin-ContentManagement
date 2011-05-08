@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+use FindBin '$Bin';
+use lib "$Bin/../lib";
 use Mojolicious::Lite;
 use Test::Mojo;
 use Test::More tests => 9;
@@ -31,7 +33,7 @@ sub _stringify_page {
 get '/list' => sub {
     my $self = shift;
 
-    my $pages = $self->helper('content_list');
+    my $pages = $self->content_list;
     $self->render( text => join '' => map _stringify_page($_) => @$pages );
 };
 

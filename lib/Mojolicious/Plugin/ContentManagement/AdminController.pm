@@ -3,7 +3,7 @@ package Mojolicious::Plugin::ContentManagement::AdminController;
 use warnings;
 use strict;
 
-use base 'Mojolicious::Controller';
+use Mojo::Base 'Mojolicious::Controller';
 
 sub list {
     # Nothing to do
@@ -15,7 +15,7 @@ sub edit {
 
     # Try to get the page
     my $path = $self->param('path');
-    my $page = $self->helper(content_load => $path)->clone;
+    my $page = $self->content_load($path)->clone;
 
     # Shortcut
     unless ($page) {
@@ -28,17 +28,17 @@ sub edit {
 
         # Build the new page
         my $title   = $self->param('title') || 'Preview';
-        my $html    = $self->helper(content_translate => $raw);
+        my $html    = $self->content_translate($raw);
         $page->title($title)->raw($raw)->html($html);
 
         # Not just a preview
         if (defined( $self->param('update_button') )) {
 
             # Save to source
-            $self->helper(content_save => $page);
+            $self->content_save($page);
 
             # Get the fresh content page
-            $page = $self->helper(content_load => $path);
+            $page = $self->content_load($path);
         }
     }
 

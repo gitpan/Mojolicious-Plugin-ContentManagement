@@ -3,13 +3,13 @@ package Mojolicious::Command::Generate::ContentManagementTemplates;
 use strict;
 use warnings;
 
-use base 'Mojo::Command';
+use Mojo::Base 'Mojo::Command';
 
-__PACKAGE__->attr(description => <<'EOF');
+has description => <<'EOF';
 Generate admin templates for the content management plugin.
 EOF
 
-__PACKAGE__->attr(usage => <<'EOF');
+has usage => <<'EOF';
 usage: $0 generate content_management_admin_templates
 EOF
 
@@ -137,20 +137,16 @@ address {
         <h1>Content Management Admin Interface</h1>
 %# Navigation
 % my $query = $self->req->url->query->to_string;
+% my $list  = url_for('content_management_admin_list');
 % $query = "?$query" if $query;
         <ul id="navigation">
-            <li><a href="/admin/<%== $query %>">List all pages</a></li>
-% if (stash('page')) {
-            <li><a href="<%== stash('page')->path %>">
-                Go to <%= stash('page')->path %>
-            </a></li>
-% }
+            <li><a href="<%== $list . $query %>">List all pages</a></li>
         </ul>
 %== content
     </div>
     <address>
         powered by
-        <a href="http://mojolicious.org/">Mojolicious</a>
+        <a href="http://mojolicio.us/">Mojolicious</a>
     </address>
 </body>
 </html>
@@ -158,7 +154,7 @@ address {
 @@ list.html.ep
 % layout 'content_management_admin';
 % my $list; # called recursively
-<% $list = {%>
+<% $list = begin %>
     <% my ($children) = @_; %>
     <ul><% for my $child (@$children) { %>
         <% my $edit_action = 'content_management_admin_edit'; %>
@@ -171,7 +167,7 @@ address {
         <%== $list->($child->children) if @{$child->children} %>
         </li>
     <% } %></ul>
-<%}%>
+<% end %>
 <p>The following pages are available for editing:</p>
 <%== $list->(content_list) %>
 

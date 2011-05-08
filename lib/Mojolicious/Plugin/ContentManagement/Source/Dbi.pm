@@ -3,21 +3,21 @@ package Mojolicious::Plugin::ContentManagement::Source::Dbi;
 use warnings;
 use strict;
 
-use base 'Mojolicious::Plugin::ContentManagement::Source';
+use Mojo::Base 'Mojolicious::Plugin::ContentManagement::Source';
 
 use Mojolicious::Plugin::ContentManagement::Page;
 use DBI;
 
-__PACKAGE__->attr([qw( dbh prefix )] => '');
+has [qw( dbh prefix )] => '';
 
-__PACKAGE__->attr( table => sub {
+has table => sub {
     my $self = shift;
     return $self->prefix . '_pages' if $self->prefix;
     return 'pages';
-});
+};
 
 # Build SQL statement handles
-__PACKAGE__->attr( sth => sub {
+has sth => sub {
     my $self    = shift;
     my $table   = $self->table;
 
@@ -31,7 +31,7 @@ __PACKAGE__->attr( sth => sub {
     $sql{$_} = $self->dbh->prepare($sql{$_}) for keys %sql;
     
     return \%sql;
-});
+};
 
 sub _forbidden_check {
     my ($self, $path) = @_;

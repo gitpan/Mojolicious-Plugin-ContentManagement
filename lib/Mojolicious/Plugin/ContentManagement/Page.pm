@@ -3,13 +3,13 @@ package Mojolicious::Plugin::ContentManagement::Page;
 use warnings;
 use strict;
 
-use base 'Mojo::Base';
+use Mojo::Base -base;
 
 use List::Util 'first';
 
-__PACKAGE__->attr([qw( path title html raw title_editable )] => '');
-__PACKAGE__->attr( children => sub { [] } );
-__PACKAGE__->attr( data     => sub { {} } );
+has [qw( path title html raw title_editable )] => '';
+has children => sub { [] };
+has data     => sub { {} };
 
 sub clone {
     my $self = shift;

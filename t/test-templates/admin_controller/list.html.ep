@@ -1,6 +1,6 @@
 % layout 'content_management_admin';
 % my $list; # called recursively
-<% $list = {%>
+<% $list = begin %>
     <% my ($children) = @_; %>
     <ul><% for my $child (@$children) { %>
         <% my $edit_action = 'content_management_admin_edit'; %>
@@ -8,11 +8,11 @@
         <% my $query = $self->req->url->query->to_string; %>
         <% $query = "?$query" if $query; %>
         <li><a href="<%== "$url$query" %>">
-            <%= $child->title %>
+            <%= $child->title || $child->path %>
         </a>
         <%== $list->($child->children) if @{$child->children} %>
         </li>
     <% } %></ul>
-<%}%>
+<% end %>
 <p>The following pages are available for editing:</p>
 <%== $list->(content_list) %>

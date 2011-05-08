@@ -1,23 +1,21 @@
 package Mojolicious::Plugin::ContentManagement;
 
-our $VERSION = '0.011';
+our $VERSION = '0.013';
 
 use warnings;
 use strict;
 
-use base 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
 use Carp;
 use Mojo::ByteStream 'b';
 use Mojo::Loader;
 
-__PACKAGE__->attr('app');
-__PACKAGE__->attr( conf     => sub { {} } );
-__PACKAGE__->attr( source   => sub { shift->_load->source } );
-__PACKAGE__->attr( type     => sub { shift->_load->type } );
+has 'app';
+has conf    => sub { {} };
+has source  => sub { shift->_load->source };
+has type    => sub { shift->_load->type };
 
-# I believe that qualifies as ill.
-# At least from a technical standpoint.
 sub register {
     my ($self, $app, $conf) = @_;
 
@@ -28,7 +26,7 @@ sub register {
     my $page;
 
     # Push page to stash if available
-    $app->plugins->add_hook( before_dispatch => sub {
+    $app->plugins->add_hook(before_dispatch => sub {
         my ($s, $c) = @_;
         my $path = $c->tx->req->url->path->to_string;
         undef $page;
@@ -38,7 +36,7 @@ sub register {
     });
 
     # Routes condition to detect managed content
-    $app->routes->add_condition( content_management => sub {
+    $app->routes->add_condition(content_management => sub {
         my ($route, $tx, $captures, $arg) = @_;
 
         return $captures if $arg && $page;
@@ -48,14 +46,14 @@ sub register {
     # Helper generation for source methods
     for my $method (qw( exists list load save )) {
 
-        $app->renderer->add_helper( "content_$method" => sub {
+        $app->helper("content_$method" => sub {
             my $c = shift;
             return $self->source->$method(@_);
         });
     }
 
     # Helper for type translation
-    $app->renderer->add_helper( content_translate => sub {
+    $app->helper(content_translate => sub {
         my $c = shift;
         return $self->type->translate(@_);
     });
@@ -133,7 +131,7 @@ Mojolicious::Plugin::ContentManagement - Content management for Mojolicious
 
 =head1 VERSION
 
-Version 0.011
+Version 0.012
 
 =head1 SYNOPSIS
 
@@ -309,6 +307,6 @@ If you want to provide patches, feel free to fork and pull request me.
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-Copyright (c) 2010 Mirko Westermeier, C<< <mail at memowe.de> >>
+Copyright (c) 2010-2011 Mirko Westermeier, C<< <mail at memowe.de> >>
 
 Released under the MIT license (see MIT-LICENSE) for details.

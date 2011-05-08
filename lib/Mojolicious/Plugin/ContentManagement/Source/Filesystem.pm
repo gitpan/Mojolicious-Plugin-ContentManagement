@@ -3,7 +3,7 @@ package Mojolicious::Plugin::ContentManagement::Source::Filesystem;
 use warnings;
 use strict;
 
-use base 'Mojolicious::Plugin::ContentManagement::Source';
+use Mojo::Base 'Mojolicious::Plugin::ContentManagement::Source';
 
 use File::Spec;
 use Mojo::Asset::File;
@@ -11,8 +11,8 @@ use IO::File;
 use Mojolicious::Plugin::ContentManagement::Page;
 use Carp;
 
-__PACKAGE__->attr( directory    => 'content' );
-__PACKAGE__->attr( tree         => sub { shift->build_tree->tree });
+has directory   => 'content';
+has tree        => sub { shift->build_tree->tree };
 
 sub _children {
     my ($self, $path) = @_;
@@ -26,7 +26,7 @@ sub _children {
 
         # Calculate path
         my $cdir    = $self->app->home->rel_dir($self->directory);
-        (my $rname  = $name) =~ s/^$cdir// or croak 'Whoops!';
+        (my $rname  = $name) =~ s/^\Q$cdir\E// or croak 'Whoops!';
         my @parts   = File::Spec->splitdir($rname);
         s/^(\d+-)?// for @parts;
         my $ppath   = join '/' => @parts;

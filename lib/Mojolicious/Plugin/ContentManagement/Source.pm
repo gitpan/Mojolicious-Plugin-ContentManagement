@@ -3,11 +3,11 @@ package Mojolicious::Plugin::ContentManagement::Source;
 use warnings;
 use strict;
 
-use base 'Mojo::Base';
+use Mojo::Base -base;
 
 use Carp;
 
-__PACKAGE__->attr([qw( app type forbidden )]);
+has [qw( app type forbidden )];
 
 sub exists  { croak 'Method unimplemented by subclass!' }
 

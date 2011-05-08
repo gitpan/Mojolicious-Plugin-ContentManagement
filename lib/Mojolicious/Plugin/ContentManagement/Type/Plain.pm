@@ -3,7 +3,7 @@ package Mojolicious::Plugin::ContentManagement::Type::Plain;
 use warnings;
 use strict;
 
-use base 'Mojolicious::Plugin::ContentManagement::Type';
+use Mojo::Base 'Mojolicious::Plugin::ContentManagement::Type';
 
 sub translate {
     my ($self, $input) = @_;
@@ -15,7 +15,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::ManagedContent::Type::Plain - plain managed content type
+Mojolicious::Plugin::ContentManagement::Type::Plain - plain managed content type
 
 =head1 SYNOPSIS
 
@@ -35,5 +35,5 @@ The identity function.
 
 =head1 SEE ALSO
 
-L<Mojolicious::Plugin::ManagedContent>,
-L<Mojolicious::Plugin::ManagedContent::Type>
+L<Mojolicious::Plugin::ContentManagement>,
+L<Mojolicious::Plugin::ContentManagement::Type>

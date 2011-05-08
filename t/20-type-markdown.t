@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+use FindBin '$Bin';
+use lib "$Bin/../lib";
 use Mojolicious::Lite;
 use Test::Mojo;
 use Test::More tests => 2;
@@ -28,6 +30,7 @@ $t->get_ok('/foo.html')->content_is(<<'EOF');
 
 <p>With <strong>Markdown</strong>, <br>
 Yay!</p>
+
 </body>
 </html>
 EOF

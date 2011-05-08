@@ -3,7 +3,7 @@ package Mojolicious::Plugin::ContentManagement::Type;
 use warnings;
 use strict;
 
-use base 'Mojo::Base';
+use Mojo::Base -base;
 
 use Carp;
 

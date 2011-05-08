@@ -1,5 +1,10 @@
 Revision history for Mojolicious-Plugin-ContentManagement
 
-Do 17 Jun 2010 11:33:35 CEST
-        Version 0.011 with some fixes
+So  8 Mai 2011 12:22:36 CEST
+    fixed typos and dependencies
 
+Sa  7 Mai 2011 06:51:25 CEST
+    fixes for the latest Mojolicious version (v1.3)
+
+Do 17 Jun 2010 11:33:35 CEST
+    Version 0.011 with some fixes
