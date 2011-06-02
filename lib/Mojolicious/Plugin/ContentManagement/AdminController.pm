@@ -14,7 +14,7 @@ sub edit {
     my $self = shift;
 
     # Try to get the page
-    my $path = $self->param('path');
+    my $path = $self->stash('path');
     my $page = $self->content_load($path)->clone;
 
     # Shortcut

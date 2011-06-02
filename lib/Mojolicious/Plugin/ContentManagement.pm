@@ -1,6 +1,6 @@
 package Mojolicious::Plugin::ContentManagement;
 
-our $VERSION = '0.013';
+our $VERSION = '0.014';
 
 use warnings;
 use strict;
@@ -27,7 +27,7 @@ sub register {
 
     # Push page to stash if available
     $app->plugins->add_hook(before_dispatch => sub {
-        my ($s, $c) = @_;
+        my $c    = shift;
         my $path = $c->tx->req->url->path->to_string;
         undef $page;
 
